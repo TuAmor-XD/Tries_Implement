@@ -33,14 +33,40 @@ public:
         }
         return node->isEndOfWord;
     }
+    void remove(const string& word) {
+        deleteHelper(root, word, 0);
+    }
+private:
+    bool deleteHelper(TrieNode* node, const string& word, int index) {
+        if (!node) return false;
+        if (index == (int)word.size()) {
+            if (!node->isEndOfWord) return false;
+            node->isEndOfWord = false;
+            return node->children.empty();
+        }
+        char c = word[index];
+        auto it = node->children.find(c);
+        if (it == node->children.end()) return false;
+        TrieNode* child = it->second;
+        bool shouldDelete = deleteHelper(child, word, index + 1);
+        if (shouldDelete) {
+            delete child;
+            node->children.erase(c);
+        }
+        return !node->isEndOfWord && node->children.empty();
+    }
 };
 
 int main() {
     Trie trie;
     trie.insert("apple");
+    trie.insert("app");
     trie.insert("banana");
     cout << boolalpha;
     cout << "apple: " << trie.search("apple") << endl;
     cout << "app: " << trie.search("app") << endl;
+    trie.remove("app");
+    cout << "app after delete: " << trie.search("app") << endl;
+    cout << "apple: " << trie.search("apple") << endl;
     return 0;
 }
