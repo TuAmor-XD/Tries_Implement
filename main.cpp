@@ -128,6 +128,7 @@ int main() {
     trie.insert("banana");
     trie.insert("application");
     trie.insert("apply");
+<<<<<<< HEAD
     trie.insert("functional");
     trie.insert("herald");
     trie.insert("somewhere");
@@ -828,6 +829,8 @@ int main() {
     trie.insert("nobody");
     trie.insert("enters");
     trie.insert("offer");
+=======
+>>>>>>> Extensions
 
     cout << boolalpha;
     while (true) {
