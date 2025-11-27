@@ -290,7 +290,7 @@ int main() {
     trie.insert("narrow");
     trie.insert("pee");
     trie.insert("hi");
-    trie.insert("sexcam");
+    trie.insert("Cesas");
     trie.insert("contracts");
     trie.insert("immigration");
     trie.insert("three");
