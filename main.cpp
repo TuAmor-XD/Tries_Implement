@@ -4,7 +4,6 @@
 #include <vector>
 #include <utility>
 using namespace std;
-#include <sstream>
 
 struct TrieNode {
     unordered_map<char, TrieNode*> children;
@@ -41,6 +40,7 @@ public:
     void remove(const string& word) {
         deleteHelper(root, word, 0);
     }
+    int countPrefix(const string& prefix);
 private:
     bool deleteHelper(TrieNode* node, const string& word, int index) {
         if (!node) return false;
@@ -91,16 +91,6 @@ vector<string> Trie::autocomplete(const string& prefix) {
     return words;
 }
 
-int countOccurrences(const string& text, const string& pattern) {
-    int count = 0;
-    size_t pos = 0;
-    while ((pos = text.find(pattern, pos)) != string::npos) {
-        ++count;
-        pos += 1;
-    }
-    return count;
-}
-
 pair<bool, vector<string>> Trie::spellCheck(const string& word) {
     bool found = search(word);
     vector<string> suggestions;
@@ -120,6 +110,16 @@ pair<bool, vector<string>> Trie::spellCheck(const string& word) {
     return {found, suggestions};
 }
 
+int Trie::countPrefix(const string& prefix) {
+    TrieNode* node = root;
+    for (char c : prefix) {
+        auto it = node->children.find(c);
+        if (it == node->children.end()) return 0;
+        node = it->second;
+    }
+    return countWordsHelper(node);
+}
+
 int main() {
     Trie trie;
     // Pre-insert some words
@@ -128,7 +128,6 @@ int main() {
     trie.insert("banana");
     trie.insert("application");
     trie.insert("apply");
-<<<<<<< HEAD
     trie.insert("functional");
     trie.insert("herald");
     trie.insert("somewhere");
@@ -829,9 +828,6 @@ int main() {
     trie.insert("nobody");
     trie.insert("enters");
     trie.insert("offer");
-=======
->>>>>>> Extensions
-
     cout << boolalpha;
     while (true) {
         cout << "\nTrie Operations Menu:" << endl;
@@ -873,13 +869,10 @@ int main() {
             for (auto& w : words) cout << w << " ";
             cout << endl;
         } else if (choice == 5) {
-            cout << "Enter word: ";
-            string word;
-            getline(cin, word);
-            cout << "Enter prefix to count: ";
+            cout << "Enter prefix to count words: ";
             string prefix;
             getline(cin, prefix);
-            cout << "Count: " << countOccurrences(word, prefix) << endl;
+            cout << "Number of words with prefix '" << prefix << "': " << trie.countPrefix(prefix) << endl;
         } else if (choice == 6) {
             cout << "Enter word to spell check: ";
             string word;
